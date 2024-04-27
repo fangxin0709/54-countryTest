@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>南港展覽館接駁專車</title>
+    <title>台北101接駁系統</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/bootstrap.css">
     <link rel="shortcut icon" href="./incn.png" type="image/x-icon">
@@ -14,17 +14,31 @@
     }
     form{
         width: 500px;
-        height: 650px;
+        height: 600px;
         background-color: #ffffff;
-        backdrop-filter: blur(10px);
         box-shadow: 5px 5px 6px #c8c8c887;
         border-radius: 20px 10px;
         margin: 20px;
-        padding: 50px 20px;
+        padding: 65px 20px;
+        /* border-bottom: 100px solid #88d5f9a8; */
     }
     .form-control{
         width: 450px;
         height: 45px;
+        background-color: #f0f0f0;
+        border: none;
+    }
+    .form-control::placeholder{
+        transition: ease 0.5s;
+    }
+    .form-control:focus::placeholder{
+        font-size: 14px;
+        color: #6a9ce2;
+        transition: ease 0.5s;
+    }
+    .form-control:focus{
+        background-color: #f0f0f0;
+        
     }
     .loginbtn{
         width: 450px;
@@ -44,31 +58,69 @@
         background-size: 100% 100%;
         letter-spacing: 3px;
     }
+    label{
+        font-size: 16px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    .veri{
+       font-family: 'Courier New', Courier, monospace;
+       font-style: italic;
+       font-size: xx-large;
+       background-color: #e7f1f5;
+       padding:5px 10px;
+       user-select: none;
+       border-radius: 10px;
+       /* border: #a0d6fb 2px solid; */
+       text-shadow: 1px 1px 2px #a493ee;
+       box-shadow: inset 1px 1px 10px #a8a8a878;
+    }
+    .btn-primary{
+        background-color: #7bbcdd;
+        border: none;
+    }
 </style>
 <body>
-    <nav class="navbar navbar-light navbar-expand-lg" style="display: flex;justify-content: space-between;align-items: center;background-color: #5aa1d3e7;height: 120px;backdrop-filter: blur(10px);box-shadow: 1px 1px 5px #0000005f;">
-        <ul class="navbar-nav">
-            <img src="./53.png" style="height: 80px;width: 150px;" alt="">
-            <a href="./index.php" style="text-decoration: none;"><h1 class="nav-link ml-2 mt-2" style="font-weight: 700;color: #ffffffca;">南港展覽館接駁專車</h1></a>
-        </ul>
-        <?php if(isset($_SESSION['login'])){
-            ?>
-        <li class="nav-item"><a href="./api/lonout.php" class="nav-link">登出</a></li>
-            <?php
-        }
-        ?>
-        <ul class="navbar-nav">
-            <li class="nav-item m-2"><a href="./admin.php" class="nav-link" style="font-size: x-large;font-weight: bold;color: #ffffffca;">站點管理</a></li>
-            </ul>
-    </nav>
-    <main style="display: flex;align-items: center;justify-content: center;">
+    <?php include "nav.php";?>
+    <main style="display: flex;align-items: center;justify-content: center;" id="app">
         <form action="./api/login.php" method="post">
-            <input class="form-group form-control" type="text" name="acc" id="acc" required placeholder="User Name(帳號)">
-            <input class="form-group form-control" type="text" name="pw" id="pw" required placeholder="Password(密碼)">
+            <h2 class="text-center" style="color: #6a9ce2;">LOGIN FORM</h2>
+            <br>
+            <label for="acc">USER NAME</label>
+            <input class="form-group form-control" type="text" name="acc" id="acc" required placeholder="請輸入帳號">
+            <label for="acc">PASSWORD</label>
+            <div class="d-flex" style="align-items: center;">
+                <input style="width:350px" class="form-group form-control" :type="this.passwordType ? 'text' : 'password'" name="pw" id="pw" required placeholder="請輸入密碼">
+                <div @click='this.passwordType =! this.passwordType ' class="btn btn-primary mb-3 ml-2" v-text="this.passwordType ? '隱藏密碼' : '查看密碼'"></div>
+            </div>
+            <label for="veri">VERIFACATION</label>
+            <input class="form-group form-control" type="text" name="veri" id="veri" required placeholder="請輸入驗證碼">
+            <div class="d-flex" style="flex-direction: row-reverse;align-items: center;">
+                <span class="veri mr-2 ml-2">0000</span>
+                <div class="btn btn-outline-success" onclick="rc()">重新產生驗證碼</div>
+            </div>
+            <br>
             <input type="submit" value="Login(登入)" class="loginbtn">
         </form>
     </main>
     <script src="./js/jquery-3.6.3.min.js"></script>
     <script src="./js/bootstrap.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        Vue.createApp({
+            data(){
+                return{
+                    passwordType: false,
+                }
+            },
+            methods:{
+                
+            },
+        }).mount("#app");
+
+        $(".veri").load("./veri.php");
+        function rc(){
+            $(".veri").load("./veri.php");
+        }
+    </script>
 </body>
 </html>
