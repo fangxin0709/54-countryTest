@@ -14,7 +14,7 @@
     }
     form{
         width: 500px;
-        height: 600px;
+        height: 620px;
         background-color: #ffffff;
         box-shadow: 5px 5px 6px #c8c8c887;
         border-radius: 20px 10px;
@@ -78,11 +78,46 @@
         background-color: #7bbcdd;
         border: none;
     }
+    .error{
+        position: absolute;
+        left: 0;
+        animation: errorAni ease forwards 0.5s;
+        background-color: #f3b2b2;
+        padding: 5px 10px;
+        margin: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: rgb(205, 86, 86);
+        cursor: default;
+    }
+    @keyframes errorAni {
+        from{
+            top: 300px;
+        }
+        to{
+            top: 130px;
+        }
+    }
 </style>
 <body>
-    <?php include "nav.php";?>
+    <?php include "nav.php";
+          if(isset($_GET['error'])){
+            switch($_GET['error']){
+                case '1':
+                    ?>
+                    <div class="error"><span onclick="$('.error').hide();" style="cursor: pointer;">&times;</span>  驗證碼錯誤</div>
+                    <?php
+                    break;
+                case '2':
+                    ?>
+                    <div class="error"><span onclick="$('.error').hide();" style="cursor: pointer;">&times;</span>  帳號密碼錯誤</div>
+                    <?php
+                    break;                    
+            }
+          }
+    ?>
     <main style="display: flex;align-items: center;justify-content: center;" id="app">
-        <form action="./api/login.php" method="post">
+        <form action="./api/login.php" method="post" id="loginForm">
             <h2 class="text-center" style="color: #6a9ce2;">LOGIN FORM</h2>
             <br>
             <label for="acc">USER NAME</label>
@@ -96,11 +131,13 @@
             <input class="form-group form-control" type="text" name="veri" id="veri" required placeholder="請輸入驗證碼">
             <div class="d-flex" style="flex-direction: row-reverse;align-items: center;">
                 <span class="veri mr-2 ml-2">0000</span>
-                <div class="btn btn-outline-success" onclick="rc()">重新產生驗證碼</div>
+                <div class="btn btn-outline-success" @click="rc()">重新產生驗證碼</div>
             </div>
             <br>
-            <input type="submit" value="Login(登入)" class="loginbtn">
+            <input type="submit" value="Login(登入)" class="loginbtn mb-3">
+            <div style="text-align: center;color: #888;">還沒註冊嗎？ <a onclick="$('#loginForm').hide();">註冊</a></div>
         </form>
+        <form action="./api/sign.php" method="post"></form>
     </main>
     <script src="./js/jquery-3.6.3.min.js"></script>
     <script src="./js/bootstrap.js"></script>
@@ -113,13 +150,16 @@
                 }
             },
             methods:{
-                
+                rc(){
+                    $(".veri").load("./veri.php");
+                }
             },
         }).mount("#app");
-
         $(".veri").load("./veri.php");
-        function rc(){
-            $(".veri").load("./veri.php");
+        if (window.performance) {
+            if (performance.navigation.type === 1) {
+                window.location.href = 'login.php';
+            }
         }
     </script>
 </body>

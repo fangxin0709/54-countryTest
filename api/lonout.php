@@ -5,4 +5,3 @@ unset($_SESSION['login']);
     alert("已登出 謝謝使用!");
     location.href="../login.php";
 </script>
-<?php
