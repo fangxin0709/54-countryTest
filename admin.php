@@ -307,7 +307,7 @@ include_once "./api/db.php";
         </div>
     </main>
 </body>
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="./js/vue3.global.js"></script>
 <script src="./js/jquery-3.6.3.min.js"></script>
 <script src="./js/bootstrap.js"></script>
 <script>
@@ -367,10 +367,12 @@ include_once "./api/db.php";
                 if(table ==='bus'){
                     $.post('./api/del_bus.php',{table,id},()=>{
                         location.reload();
+                        alert("已刪除");
                     })
                 }else if(table === 'station'){
                     $.post('./api/del_station.php',{table,id},()=>{
                         location.reload();
+                        alert("已刪除");
                     })
                 }
             },

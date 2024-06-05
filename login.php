@@ -141,7 +141,7 @@
     </main>
     <script src="./js/jquery-3.6.3.min.js"></script>
     <script src="./js/bootstrap.js"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="./js/vue3.global.js"></script>
     <script>
         Vue.createApp({
             data(){
