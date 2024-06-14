@@ -1,5 +1,5 @@
 <?php include_once "db.php";
-if($_POST['editBus_minute']<=0){
+if($_POST['editBus_minute']<0){
     ?>
     <script>
         alert("值必須大於0,請重新修改");

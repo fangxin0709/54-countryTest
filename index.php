@@ -1,4 +1,4 @@
-<?php session_start();?>
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,6 +45,10 @@
 
     td {
         padding: 0;
+        display: flex;
+        align-items: center; 
+        justify-content: center;
+        position: relative;
     }
 
     table {
@@ -63,10 +67,15 @@
         text-align: center;
         padding: 5px 0;
     }
+
+    p{
+        position: absolute;
+        z-index: 999;
+    }
 </style>
 
 <body>
-    <?php 
+    <?php
     include "./nav.php";
     include_once "./api/db.php";
     $lows = $conn->query("select * from `indexval`")->fetchAll(PDO::FETCH_ASSOC);
@@ -83,8 +92,8 @@
             $totalRows3 = ceil($totalRows / $div);
             for ($i = 0; $i < $totalRows3; $i++) {
                 ?>
-            <tr style="display: flex;margin:50px;">
-                <?php
+                <tr style="display: flex;margin:50px;">
+                    <?php
                     for ($j = 0; $j < $div; $j++) {
                         $index = $i * $div + $j;
                         if ($index >= $totalRows) {
@@ -92,67 +101,64 @@
                         }
                         $station = $stations[$index];
                         //計算
-                        $prev=$conn->query("select sum(`minute`+`waiting`) from `station` where `rank` < {$station['rank']}")->fetchColumn();
-                        $arrive=$prev+$station['minute']; 
-                        $leave=$arrive+$station['waiting'];
-                        //顯示在主頁的一台車
-                        $bus=$conn->query("select * from `bus` where `minute` <= $leave order by `minute` desc")->fetch(PDO::FETCH_ASSOC);
-                        if(!empty($bus)){
-                            $station['busName']=$bus['busName'];
-                            if($bus['minute'] < $arrive){
-                                $station['time']="約".($arrive-$bus['minute'])."分鐘";
-                            }else{
-                                $station['time']="<span style='color:red;'>已到站</span>";
-                            }
-                        }else{
-                            $station['busName']='';
-                            $station['time']="<span style='color:#888;'> 未發車</span>";
-                        }
-                        //顯示在小格子的三台車
-                        $buses = $conn->query("select * from `bus` where `minute` <= $leave order by `minute` desc limit 3")->fetchAll(PDO::FETCH_ASSOC);
-                        $busInfo = [];
-                        if (!empty($buses)) {
-                            foreach ($buses as $bus) {
-                                $info = [];
-                                $info['busName'] = $bus['busName'];
-                                if ($bus['minute'] < $arrive) {
-                                    $info['time'] = "約" . ($arrive - $bus['minute']) . "分鐘";
-                                } else {
-                                    $info['time'] = "<span style='color:red;'>已到站</span>";
-                                }
-                                $busInfo[] = $info;
-                            }
-                            ob_start();
-                            foreach ($busInfo as $info) {
-                                echo "<span style='user-select:none;'>{$info['busName']} {$info['time']}</span>";
-                            }
-                            $station['bus_html']  = ob_get_clean();
+                        $prev = $conn->query("SELECT SUM(`minute` + `waiting`) FROM `station` WHERE `rank` < {$station['rank']}")->fetchColumn();
+                        $arrive = $prev + $station['minute'];
+                        $leave = $arrive + $station['waiting'];
+                        // 显示在主页的一台车
+                        $bus = $conn->query("SELECT * FROM `bus` WHERE `minute` <= $leave ORDER BY `minute` DESC")->fetch(PDO::FETCH_ASSOC);
+                        if ($bus) {
+                            $station['busName'] = $bus['busName'];
+                            $station['time'] = ($bus['minute'] < $arrive) ? "約" . ($arrive - $bus['minute']) . "分鐘" : "<span style='color:red;'>已到站</span>";
                         } else {
-                            $info['busName'] = $bus['busName'];
-                            $station['bus_html']  = "<span style='color:#888;'>{$info['busName']} 未發車</span>";
+                            $station['busName'] = '';
+                            $station['time'] = "<span style='color:#888;'>未發車</span>";
                         }
-                    ?>
-                <td style="display: flex; align-items: center; justify-content: center;position: relative;" id="<?=$station['id']?>">
-                    <div style="position: relative;" class="longStr"></div>
-                    <p style="z-index: 999; position: absolute; margin-bottom: 135px;font-weight: bold;">
-                        <?=$station['busName']?>
-                    </p>
-                    <p style="z-index: 999; position: absolute; margin-bottom: 85px;;">
-                       <?=$station['time']?>
-                    </p>
-                    <img style="position: absolute;border-radius: 20px;" class="point" src="./img/point1.png" alt="" onmousemove="show(<?=$station['id']?>)" onmouseout="bye(<?=$station['id']?>)">
-                    <div id="show_<?=$station['id']?>" class="show3" style="display: none;" onmousemove="wait(<?=$station['id']?>)" onmouseout="realBye(<?=$station['id']?>)">
-                        <?=$station['bus_html'];?>
-                    </div>
-                    <p style="z-index: 999; position: absolute; margin-bottom: -85px;font-weight: bolder;">
-                        <?= $station['stationName'] ?>
-                    </p>
-                </td>
-                <?php
+                        // 显示在小格子的三台车
+                        $buses = $conn->query("SELECT * FROM `bus` WHERE `minute` <= $leave ORDER BY `minute` DESC LIMIT 3")->fetchAll(PDO::FETCH_ASSOC);
+                        if (count($buses) < 3) {
+                            $addBus3 = $conn->query("SELECT `busName` FROM `bus` WHERE `minute` > $leave ORDER BY `minute` ASC LIMIT " . (3 - count($buses)))->fetchAll(PDO::FETCH_ASSOC);
+                            $buses = array_merge($buses, $addBus3);
+                        }
+                        $busInfo = [];
+                        foreach ($buses as $bus) {
+                            $info = [];
+                            $info['busName'] = $bus['busName'];
+                            if (isset($bus['minute'])) {
+                                $info['time'] = ($bus['minute'] < $arrive) ? "約" . ($arrive - $bus['minute']) . "分鐘" : "<span style='color:red;'>已到站</span>";
+                            } else {
+                                $info['time'] = "<span style='color:#888;'>已過站</span>";
+                            }
+                            $busInfo[] = $info;
+                        }
+                        ob_start();
+                        foreach ($busInfo as $info) {
+                            echo "<span'>{$info['busName']} {$info['time']}</span><br>";
+                        }
+                        $station['bus_html'] = ob_get_clean();
+
+                        ?>
+                        <td id="<?= $station['id'] ?>">
+                            <div style="position: relative;" class="longStr"></div>
+                            <p style="margin-bottom: 135px;font-weight: bold;">
+                                <?= $station['busName'] ?>
+                            </p>
+                            <p style="margin-bottom: 85px;">
+                                <?= $station['time'] ?>
+                            </p>
+                            <img style="position: absolute;border-radius: 20px;" class="point" src="./img/point1.png" alt=""
+                                onmousemove="show(<?= $station['id'] ?>)" onmouseout="bye(<?= $station['id'] ?>)">
+                            <div id="show_<?= $station['id'] ?>" class="show3" style="display: none;">
+                                <?= $station['bus_html']; ?>
+                            </div>
+                            <p style="margin-bottom: -85px;font-weight: bolder;">
+                                <?= $station['stationName'] ?>
+                            </p>
+                        </td>
+                        <?php
                     }
                     ?>
-            </tr>
-            <?php
+                </tr>
+                <?php
             }
             ?>
         </table>
@@ -161,16 +167,13 @@
     <script src="./js/jquery-3.6.3.min.js"></script>
     <script src="./js/bootstrap.js"></script>
     <script>
-        function show(id){
-            $("#show_"+id).fadeIn('fast');
+        function show(id) {
+            $("#show_" + id).fadeIn('fast');
         }
-        function bye(id){
-            $("#show_"+id).fadeOut('fast');
+        function bye(id) {
+            $("#show_" + id).fadeOut('fast');
 
         }
-        // function realBye(id){
-        //     $("#show_"+id).fadeOut('fast');
-        // }
         //開頭線判斷
         function firstStr() {
             $("tr:first-child").css({
@@ -180,10 +183,6 @@
                 "border-radius": "20px 0 0 20px",
                 "width": "180px",
             });
-            // $("tr:first-child>td:first-child>p").css({
-            //     'left':'50%',
-            //     'transform': 'translateX(50%)',
-            // })
             $("tr:first-child>td:first-child").css({
                 "justify-content": "flex-start",
             });
@@ -200,19 +199,11 @@
                     "width": "180px",
                     "border-radius": "0px 20px 20px 0px",
                 });
-                // $("tr:last-child>td:last-child>p").css({
-                //     'left':'50%',
-                //     'transform': 'translateX(50%)',
-                // })
             } else {
                 //雙數
                 $("tr:last-child>td:last-child").css({
                     "justify-content": "flex-start",
                 });
-                // $("tr:last-child>td:last-child>p").css({
-                //     'left':'50%',
-                //     'transform': 'translateX(50%)',
-                // })
                 $("tr:last-child>td:last-child>div.longStr").css({
                     "border-radius": "20px 0px 0px 20px",
                     "width": "180px",
@@ -270,7 +261,6 @@
             })
         }
         editVal();
-        
     </script>
 </body>
 </html>
