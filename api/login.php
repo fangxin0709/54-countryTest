@@ -4,15 +4,18 @@ if($_SESSION['veri']!=$_POST['veri']){
     header("location:../login.php?error=1");
     exit();
 }
-if($_POST['acc']=="admin" && $_POST['pw']=="1234"){
+$admin=$conn->query("SELECT count(*) 
+                    FROM admin 
+                    WHERE acc='{$_POST['acc']}' && `pw`='{$_POST['pw']}'")
+            ->fetchColumn();
+if($admin==1){
     $_SESSION['login']="ok";
     ?>
     <script>
-        alert("登入成功!");
-        location.href="../admin.php";
-        </script>
+          alert("登入成功!");
+          location.href="../admin.php";
+    </script>
     <?php
 }else{
     header("location:../login.php?error=2");
-    exit();
 }

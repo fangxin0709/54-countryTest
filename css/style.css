@@ -7,5 +7,6 @@
 }
 .nav-link:hover{
     transition: all 0.5s!important;
+    border-radius: 10px;
     background-color: rgba(240, 248, 255, 0.313)!important;
 }
