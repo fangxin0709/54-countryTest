@@ -1,7 +1,6 @@
 <?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,17 +13,21 @@
     .longStr {
         width: 300px;
         height: 30px;
-        background-color: rgb(138, 199, 237);
+        background-color: #8ac7ed;
     }
 
     .point {
         width: 60px;
         height: 60px;
         cursor: pointer;
+        transition: 0.1s;
     }
-
+    .point:hover{
+        transition: 0.3s;
+        transform: scale(1.1);
+    }
     .shortStrDown {
-        background-color: rgb(138, 199, 237);
+        background-color: #8ac7ed;
         height: 100px;
         width: 30px;
         position: relative;
@@ -32,7 +35,7 @@
     }
 
     .shortStrUp {
-        background-color: rgb(138, 199, 237);
+        background-color: #8ac7ed;
         height: 100px;
         width: 30px;
         position: relative;
@@ -81,20 +84,20 @@
         z-index: 999;
     }
 </style>
-
 <body>
-    <?php
-    include "./nav.php";
-    include_once "./api/db.php";
-    $lows = $conn->query("select * from `indexval`")->fetchAll(PDO::FETCH_ASSOC);
-    ?>
-    <input name="editSta" id="editSta" type="range" max="5" min="1" value="<?= $lows[0]['editVal'] ?>">
-    <span id="editVal">每列顯示<?= $lows[0]['editVal'] ?>站
-    </span>
-    <div class="d-flex" style="justify-content: center;align-items: center;">
-        <table>
             <?php
-            $stations = $conn->query("select * from `station` order by `rank`")->fetchAll(PDO::FETCH_ASSOC);
+            include "./nav.php";
+            include_once "./api/db.php";
+            $lows = $conn->query("select * from `indexval`")->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+            <div style="display: flex;justify-content: center;; align-items: center;" class="m-3">
+                <input name="editSta" id="editSta" type="range" max="5" min="1" value="<?= $lows[0]['editVal'] ?>" class="mr-2">
+                <span style="font-size: x-large;" id="editVal">每列顯示<span style="font-size: xx-large;font-style: italic;font-weight: bold;font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;color: #558fcd;"><?= $lows[0]['editVal'] ?></span>站</span>
+            </div>
+            <div class="d-flex " style="justify-content: center;align-items: center;">
+            <table class="busTable">
+            <?php
+            $stations = $conn->query("select * from `station` order by `rank` asc")->fetchAll(PDO::FETCH_ASSOC);
             $div = $lows[0]['editVal'];
             $totalRows = count($stations);
             $totalRows3 = ceil($totalRows / $div);
@@ -114,7 +117,7 @@
                         $arrive = $prev + $station['minute'];
                         $leave = $arrive + $station['waiting'];
                         // 顯示在主頁的一台車
-                        $bus = $conn->query("SELECT * FROM `bus` WHERE `minute` <= $leave ORDER BY `minute` ASC")->fetch(PDO::FETCH_ASSOC);
+                        $bus = $conn->query("SELECT * FROM `bus` WHERE `minute` <= $leave ORDER BY `minute` DESC")->fetch(PDO::FETCH_ASSOC);
                         if ($bus) {
                             $station['busName'] = $bus['busName'];
                             $station['time'] = ($bus['minute'] < $arrive) ? "約" . ($arrive - $bus['minute']) . "分鐘" : "<span style='color:red;'>已到站</span>";
@@ -123,7 +126,7 @@
                             $station['time'] = "<span style='color:#888;'>未發車</span>";
                         }
                         // 顯示在小格子的三台車
-                        $buses = $conn->query("SELECT * FROM `bus` WHERE `minute` <= $leave ORDER BY `minute` ASC")->fetchAll(PDO::FETCH_ASSOC);
+                        $buses = $conn->query("SELECT * FROM `bus` WHERE `minute` <= $leave ORDER BY `minute` DESC")->fetchAll(PDO::FETCH_ASSOC);
                         if (count($buses) < 3) {
                             $addBus3 = $conn->query("SELECT `busName`, `minute` FROM `bus` WHERE `minute` > $leave ORDER BY `minute` DESC LIMIT " . (3 - count($buses)))->fetchAll(PDO::FETCH_ASSOC);
                             $buses = array_merge($buses, $addBus3);
@@ -155,7 +158,7 @@
                         <?= $station['time'] ?>
                     </p>
                     <img style="position: absolute;border-radius: 20px;" class="point" src="./img/point1.png" alt=""
-                        onmousemove="show(<?= $station['id'] ?>)" onmouseout="bye(<?= $station['id'] ?>)">
+                    onmousemove="show(<?= $station['id'] ?>)" onmouseout="bye(<?= $station['id'] ?>)">
                     <div id="show_<?= $station['id'] ?>" class="show3" style="display: none;">
                         <?= $station['bus_html']; ?>
                     </div>
@@ -164,16 +167,14 @@
                     </p>
                 </td>
                 <?php
-                    }
+            }
                     ?>
             </tr>
             <?php
-            }
-            ?>
-        </table>
-    </div>
-    <div style="transition: ease;"></div>
-
+        }
+        ?>
+    </table>
+</div>
     <script src="./js/jquery-3.6.3.min.js"></script>
     <script src="./js/bootstrap.js"></script>
     <script>
@@ -279,7 +280,6 @@
             })
         }
         editVal();
-    </script>
+        </script>
 </body>
-
 </html>

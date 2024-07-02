@@ -6,7 +6,7 @@
     <title>台北101接駁系統</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/bootstrap.css">
-    <link rel="shortcut icon" href="./incn.png" type="image/x-icon">
+    <link rel="shortcut icon" href="./img/incn.png" type="image/x-icon">
 </head>
 <style>
     body{
@@ -16,11 +16,9 @@
         width: 500px;
         height: 620px;
         background-color: #ffffff;
-        box-shadow: 5px 5px 6px #c8c8c887;
         border-radius: 20px 10px;
         margin: 20px;
         padding: 65px 20px;
-        /* border-bottom: 100px solid #88d5f9a8; */
     }
     .form-control{
         width: 450px;
@@ -29,7 +27,6 @@
         border: none;
         position: relative;
         transition: ease 0.5s;
-
     }
     .form-control::placeholder{
         transition: ease 0.5s;
@@ -59,7 +56,6 @@
     .loginbtn:hover{
         transition: ease 0.5s;
         color: #ffffff;
-        /* font-size: 20px; */
         background-size: 100% 100%;
         letter-spacing: 3px;
     }
@@ -113,7 +109,7 @@
     <?php include "nav.php"; 
     ?>
     <main style="display: flex;align-items: center;justify-content: center;" id="app">
-        <form action="./api/search.php" method="post">
+        <form action="./api/search.php" method="post" class="shadow">
             <h2 class="text-center" style="color: #6a9ce2;font-weight: bold;">班次查詢</h2>
             <br>
             <label for="email">EMAIL</label>
@@ -124,5 +120,8 @@
     <script src="./js/jquery-3.6.3.min.js"></script>
     <script src="./js/bootstrap.js"></script>
     <script src="./js/vue3.global.js"></script>
+    <script>
+        $(".1").load("./h1.html");
+    </script>
 </body>
 </html>

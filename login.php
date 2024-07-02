@@ -16,11 +16,9 @@
         width: 500px;
         height: 620px;
         background-color: #ffffff;
-        box-shadow: 5px 5px 6px #c8c8c887;
         border-radius: 20px 10px;
         margin: 20px;
         padding: 65px 20px;
-        /* border-bottom: 100px solid #88d5f9a8; */
     }
     .form-control{
         width: 450px;
@@ -29,7 +27,6 @@
         border: none;
         position: relative;
         transition: ease 0.5s;
-
     }
     .form-control::placeholder{
         transition: ease 0.5s;
@@ -41,72 +38,43 @@
         transition: ease 0.5s;
         position: absolute;
     }
-    .form-control:focus{
-        background-color: #f0f0f0;
-        border:none;
-    }
-    .loginbtn{
-        width: 450px;
-        height: 50px;
-        border-radius: 30px;
-        border: 2px solid;
-        border-color: #5aa1d3e7;
-        background: linear-gradient(to left,#a0d6fb,#6a9ce2,#948fe7) 0 0 / 0 100% no-repeat;
-        transition: ease 0.5s;
-        font-size: 18px;
-        letter-spacing: 1px;
-    }
-    .loginbtn:hover{
-        transition: ease 0.5s;
-        color: #ffffff;
-        /* font-size: 20px; */
-        background-size: 100% 100%;
-        letter-spacing: 3px;
-    }
-    label{
-        font-size: 16px;
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    }
-    .veri{
-       font-family: 'Courier New', Courier, monospace;
-       font-style: italic;
-       font-size: xx-large;
-       background-color: #e7f1f5;
-       padding:5px 10px;
-       user-select: none;
-       border-radius: 10px;
-       /* border: #a0d6fb 2px solid; */
-       text-shadow: 1px 1px 2px #a493ee;
-       box-shadow: inset 1px 1px 10px #a8a8a878;
-    }
-    .signVeri{
-       font-family: 'Courier New', Courier, monospace;
-       font-style: italic;
-       font-size: xx-large;
-       background-color: #e7f1f5;
-       padding:5px 10px;
-       user-select: none;
-       border-radius: 10px;
-       /* border: #a0d6fb 2px solid; */
-       text-shadow: 1px 1px 2px #a493ee;
-       box-shadow: inset 1px 1px 10px #a8a8a878;
-    }
-    .btn-primary{
-        background-color: #7bbcdd;
-        border: none;
-    }
-    .error{
-        position: absolute;
-        left: 0;
-        animation: errorAni ease forwards 0.5s;
-        background-color: #f3b2b2;
-        padding: 5px 10px;
-        margin: 10px;
-        font-size: 18px;
-        color: rgb(205, 86, 86);
-        cursor: default;
-        border: 1px #dfb7b7 solid; 
-        border-radius:5px ;
+
+.veri{
+    font-family: 'Courier New', Courier, monospace;
+    font-style: italic;
+    font-size: xx-large;
+    background-color: #e7f1f5;
+    padding:5px 10px;
+    user-select: none;
+    border-radius: 10px;
+    /* border: #a0d6fb 2px solid; */
+    text-shadow: 1px 1px 2px #a493ee;
+    box-shadow: inset 1px 1px 10px #a8a8a878;
+ }
+ .signVeri{
+    font-family: 'Courier New', Courier, monospace;
+    font-style: italic;
+    font-size: xx-large;
+    background-color: #e7f1f5;
+    padding:5px 10px;
+    user-select: none;
+    border-radius: 10px;
+    /* border: #a0d6fb 2px solid; */
+    text-shadow: 1px 1px 2px #a493ee;
+    box-shadow: inset 1px 1px 10px #a8a8a878;
+ }
+ .error{
+     position: absolute;
+     left: 0;
+     animation: errorAni ease forwards 0.5s;
+     background-color: #f3b2b2;
+     padding: 5px 10px;
+     margin: 10px;
+     font-size: 18px;
+     color: rgb(205, 86, 86);
+     cursor: default;
+     border: 1px #dfb7b7 solid; 
+     border-radius:5px;
     }
     @keyframes errorAni {
         from{
@@ -140,7 +108,7 @@
           }
     ?>
     <main style="display: flex;align-items: center;justify-content: center;" id="app">
-        <form action="./api/login.php" method="post" id="loginForm">
+        <form action="./api/login.php" method="post" id="loginForm" class="shadow">
             <h2 class="text-center" style="color: #6a9ce2;">LOGIN</h2>
             <br>
             <label for="acc">USER NAME</label>

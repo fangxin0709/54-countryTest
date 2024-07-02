@@ -1,5 +1,6 @@
-.bg-primary{
-    background-color: lightblue!important;
+.btn-primary{
+    background-color: #7bbcdd!important;
+    border: none !important;
 }
 .nav-link{
     transition: all 0.5s!important;
@@ -9,4 +10,109 @@
     transition: all 0.5s!important;
     border-radius: 10px;
     background-color: rgba(240, 248, 255, 0.313)!important;
+}
+body{
+    background-image: 
+        linear-gradient(#d6e1e88c, #e5c37e6d),
+        url(../img2/img104.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    backdrop-filter: blur(50px);
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.busTable {
+    background-color:#dcf1ff;
+    position: relative;
+    border-radius: 25px;
+    box-shadow: none;
+}
+
+.btn-change {
+    background-color: #eaeaea;
+}
+
+.btn-change.active {
+    background-color: #5aa1d3cc;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.carousel-indicators {
+    margin: 0;
+    justify-content: flex-start;
+    bottom: 85%;
+    border: 2px solid #3875ab75;
+    padding: 10px;
+}
+
+.carousel-item {
+    position: relative;
+    top: 110px;
+}
+.carousel-inner{
+    overflow: unset;
+}
+.form {
+    width: 500px;
+    box-shadow: 5px 5px 6px #c8c8c887;
+    border-radius: 20px 10px;
+    padding: 65px 20px;
+    margin: 20px;
+}
+
+.form-control {
+    width: 450px;
+    height: 45px;
+    background-color: #f0f0f0;
+    border: none;
+}
+
+.form-control::placeholder {
+    transition: ease 0.5s;
+}
+
+.form-control:focus::placeholder {
+    font-size: 14px;
+    color: #6a9ce2;
+    transition: ease 0.5s;
+}
+.loginbtn{
+    width: 450px;
+    height: 50px;
+    border-radius: 30px;
+    border: 2px solid;
+    border-color: #5aa1d3e7;
+    background: linear-gradient(to left,#a0d6fb,#6a9ce2,#948fe7) 0 0 / 0 100% no-repeat;
+    transition: ease 0.5s;
+    font-size: 18px;
+    letter-spacing: 1px;
+}
+.loginbtn:hover{
+    transition: ease 0.5s;
+    color: #ffffff;
+    background-size: 100% 100%;
+    letter-spacing: 3px;
+}
+
+.form-control:focus {
+    background-color: #f0f0f0 !important;
+    border: none;
+}
+label{
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.modal {
+    z-index: 999;
+    position: absolute;
+    background-color: #00000041;
+}
+.dropdown-item.active{
+    background-color: #c8c8c8;
+    color: #0062bd;
+    font-weight: bold;
 }

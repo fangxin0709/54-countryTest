@@ -49,8 +49,7 @@ Vue.createApp({
         edit(table,id){
             switch(table){
                 case 'bus':
-                $(".modal.e1").fadeIn();
-                $("#Slider").hide();
+                $(".modal.e1").fadeIn('fast');
                 $.getJSON('./api/get_bus.php',{table,id},(data)=>{
                     $('#busTittle').text(data.busName);
                     $('#editBus_minute').val(data.minute);
@@ -58,8 +57,7 @@ Vue.createApp({
                 })
                 break;
                 case 'station':
-                $(".modal.e2").fadeIn();
-                $("#Slider").hide();
+                $(".modal.e2").fadeIn('fast');
                 $.getJSON('./api/get_station.php',{table,id},(data)=>{
                     $('#staTittle').text(data.stationName);
                     $('#editSta_minute').val(data.minute);
@@ -87,6 +85,26 @@ Vue.createApp({
                 })
                 break;
             }
+        },
+        setDragable(tableId) {
+            $(`#${tableId} tbody`).sortable({
+                helper: function (e, ui) {
+                    ui.children().each(function () {
+                        $(this).width($(this).width());
+                    })
+                    return ui;
+                },
+                placeholder: "ui-state-highlight",
+                update: function () {
+                    let arr = [];
+                    $(`#${tableId} tbody tr`).each(function () {
+                        arr.push($(this).data("id"));
+                    })
+                    $.post("./api/edit_rank.php", { table: tableId, arr: arr }, function () {
+                    })
+                }
+    
+            }).disableSelection();
         },
     }
 }).mount("#app");

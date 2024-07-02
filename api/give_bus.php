@@ -8,20 +8,36 @@ if($_POST['needBus']=='0'){
     <?php
     exit();
 }
-$rows = $conn->query("select * from `form` where `checked` ='1' AND `close`='1'")->fetchAll(PDO::FETCH_ASSOC);
-$allReses = count($rows);
-$people = 3;
-$needBus = ceil($allReses / $people);
-for ($i = 0; $i < $allReses; $i++) {
-    $busNum = sprintf("%04d", floor($i / $people) + 1); // 車輛編號
-    $busName = "AUTO-" . $busNum;
-    $personId = $rows[$i]['id'];
-    $sql = "UPDATE `form` SET `takeBus` = '$busName' WHERE `id` = $personId";
-    $conn->exec($sql);
+include "db.php";
+
+// Get the number of people per bus
+$num = $conn->query("select `people` from `people` limit 1")->fetchColumn();
+
+// Get the total number of users who meet the criteria
+$total_users = $conn->query("select count(*) from `form` where `checked`='1' AND `close`='1'")->fetchColumn();
+
+// Calculate the number of buses needed
+$counts = ceil($total_users / $num);
+
+// Get the users who meet the criteria
+$users = $conn->query("select * from `form` where `checked`='1' AND `close`='1'")->fetchAll(PDO::FETCH_ASSOC);
+for ($i = 0; $i < $counts; $i++) {
+    $bus_num = "AUTO-" . sprintf("%04d", rand(1, 9999));
+    $start = $i * $num;
+    $end = $start + $num;
+
+    for ($j = $start; $j < $end && $j < $total_users; $j++) {
+        $user = $users[$j];
+        $sql = "update `form` set `takeBus`='$bus_num' where `id`='{$user['id']}'";
+        $conn->exec($sql);
+    }
 }
-$sql = "UPDATE `formopen` SET `active`='0' WHERE `id`=1;";
+$sql = "UPDATE `formopen` SET `active`='0' WHERE `id`='1'";
 $conn->exec($sql);
 $sql = "UPDATE `form` SET `close`='0' where `checked` = '1'";
 $conn->exec($sql);
-header("location:../admin.php");
 ?>
+<script>
+alert("已分配車輛!");
+location.href='../admin.php';
+</script>
