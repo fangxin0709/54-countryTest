@@ -1,12 +1,6 @@
 <?php include_once "db.php";
-$_SESSION['active'] = 'ok';
-     $formOpen = $conn->query("select * from `formopen` where `id`=1;")->fetch(PDO::FETCH_ASSOC);
-     if($formOpen['active']=='1'){
-         $_SESSION['active'] = 'ok';
-     }else{
-         unset($_SESSION['active']);
-     }
-     if(!isset($_SESSION['active'])){
+     $formOpen = $conn->query("select `active` from `formopen` limit 1")->fetchColumn();
+     if($formOpen==0){
         ?>
         <script>
             alert("該表單目前不接受回應!");
@@ -26,7 +20,7 @@ if($checkE==1 && $check == 0){
         location.href = "../index.php";
     </script>
 <?php
-}else if($checkE==1 && $check== 1){
+}else if($check== 1){
     ?>
     <script>
         alert("您已經參與過意見調查!");

@@ -33,7 +33,7 @@
     }
 
     .table-striped tbody tr:nth-of-type(odd) {
-        background-color: #d3e0e584;
+        background-color: #fcfdfe;
     }
 
     td:first-child {
@@ -304,7 +304,7 @@ include_once "./api/db.php";
                             </thead>
                             <tbody>
                                 <?php include "./api/db.php";
-                    $lists = $conn->query("select `id`,`email`,`takeBus`,`addTime` from `form`")->fetchAll(PDO::FETCH_ASSOC);
+                    $lists = $conn->query("select * from `form`")->fetchAll(PDO::FETCH_ASSOC);
                     foreach($lists as $list){
                         ?>
 
@@ -339,7 +339,7 @@ include_once "./api/db.php";
                             </thead>
                             <tbody>
                                 <?php include "./api/db.php";
-                    $ress = $conn->query("select `id`,`name`,`email`,`addTime` from `form` where `checked`='1' AND `close`='1'")->fetchAll(PDO::FETCH_ASSOC);
+                    $ress = $conn->query("select * from `form` where `checked`='1' AND `close`='1'")->fetchAll(PDO::FETCH_ASSOC);
                     foreach($ress as $res){
                         ?>
 
@@ -474,9 +474,9 @@ include_once "./api/db.php";
     $(document).ready(function () {
         let active = $("#customSwitch1").val();
         if (active == '1') {
-            $("#customSwitch1").attr('checked', true);
+            $("#customSwitch1").attr('type', true);
         } else {
-            $("#customSwitch1").attr('checked', false);
+            $("#customSwitch1").attr('type', false);
         }
     })
     $(document).ready(function () {
@@ -511,7 +511,7 @@ include_once "./api/db.php";
     $(document).ready(function () {
         $("#people").on('change',()=> {
             var people = $("#people").val();
-            if (people < 0 || people == "") {
+            if (people < 0 || people == "") { 
                 alert("航航很帥!!!")
                 $("#people").val(1)
             } else {

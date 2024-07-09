@@ -6,7 +6,7 @@ if($_SESSION['veri']!=$_POST['veri']){
 }
 $admin=$conn->query("SELECT count(*) 
                     FROM admin 
-                    WHERE acc='{$_POST['acc']}' && `pw`='{$_POST['pw']}'")
+                    WHERE `acc`='{$_POST['acc']}' && `pw`='{$_POST['pw']}'")
             ->fetchColumn();
 if($admin==1){
     $_SESSION['login']="ok";

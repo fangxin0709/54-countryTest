@@ -90,12 +90,13 @@
             include_once "./api/db.php";
             $lows = $conn->query("select * from `indexval`")->fetchAll(PDO::FETCH_ASSOC);
             ?>
-            <div style="display: flex;justify-content: center;; align-items: center;" class="m-3">
+            <div class="indexCon shadow" style="">
                 <input name="editSta" id="editSta" type="range" max="5" min="1" value="<?= $lows[0]['editVal'] ?>" class="mr-2">
-                <span style="font-size: x-large;" id="editVal">每列顯示<span style="font-size: xx-large;font-style: italic;font-weight: bold;font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;color: #558fcd;"><?= $lows[0]['editVal'] ?></span>站</span>
+                <span style="font-size: x-large;" id="editVal">每列顯示<span style="font-size: xx-large;font-style: italic;font-weight: bold;font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;color: #558fcd;"> <?= $lows[0]['editVal'] ?> </span>站</span>
             </div>
-            <div class="d-flex " style="justify-content: center;align-items: center;">
-            <table class="busTable">
+            <div class="d-flex" style="justify-content: center;align-items: center;">
+            <table class="busTable shadow" style="position: relative;">
+                <div class="blur"></div>
             <?php
             $stations = $conn->query("select * from `station` order by `rank` asc")->fetchAll(PDO::FETCH_ASSOC);
             $div = $lows[0]['editVal'];
@@ -119,7 +120,7 @@
                         // 顯示在主頁的一台車
                         $bus = $conn->query("SELECT * FROM `bus` WHERE `minute` <= $leave ORDER BY `minute` DESC")->fetch(PDO::FETCH_ASSOC);
                         if ($bus) {
-                            $station['busName'] = $bus['busName'];
+                            $station['busName'] = ($bus['minute'] < $arrive) ? $bus['busName'] : "<span style='color:red;'>". $bus['busName'] ."</span>";
                             $station['time'] = ($bus['minute'] < $arrive) ? "約" . ($arrive - $bus['minute']) . "分鐘" : "<span style='color:red;'>已到站</span>";
                         } else {
                             $station['busName'] = '';
@@ -137,6 +138,11 @@
                             $info = [];
                             $info['busName'] = $bus['busName'];
                             if ($bus['minute'] <= $leave) {
+                                if($bus['minute'] > $arrive){
+                                    $info['busName'] = "<span style='color:red;'>".$bus['busName']."</span>";
+                                }else{
+                                    $info['busName'] = $bus['busName'];
+                                }
                                 $info['time'] = ($bus['minute'] < $arrive) ? "約" . ($arrive - $bus['minute']) . "分鐘" : "<span style='color:red;'>已到站</span>";
                             } else {
                                 $info['time'] = "<span style='color:#888;'>未發車</span>";

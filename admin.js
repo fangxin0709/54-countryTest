@@ -50,7 +50,7 @@ Vue.createApp({
             switch(table){
                 case 'bus':
                 $(".modal.e1").fadeIn('fast');
-                $.getJSON('./api/get_bus.php',{table,id},(data)=>{
+                $.getJSON('./api/get.php',{table,id},(data)=>{
                     $('#busTittle').text(data.busName);
                     $('#editBus_minute').val(data.minute);
                     $('#editBusID').val(data.id);
@@ -58,7 +58,7 @@ Vue.createApp({
                 break;
                 case 'station':
                 $(".modal.e2").fadeIn('fast');
-                $.getJSON('./api/get_station.php',{table,id},(data)=>{
+                $.getJSON('./api/get.php',{table,id},(data)=>{
                     $('#staTittle').text(data.stationName);
                     $('#editSta_minute').val(data.minute);
                     $('#edit_waiting').val(data.waiting);
@@ -68,23 +68,9 @@ Vue.createApp({
             }   
         },
         del(table,id){
-            switch(table){
-                case 'bus':
-                $.post('./api/del_bus.php',{table,id},()=>{
+                $.post('./api/del.php',{table,id},()=>{
                     location.reload();
                 })
-                break;
-                case 'station':
-                $.post('./api/del_station.php',{table,id},()=>{
-                    location.reload();
-                })
-                break;
-                case 'form':
-                $.post('./api/del_form.php',{table,id},()=>{
-                    location.reload();
-                })
-                break;
-            }
         },
         setDragable(tableId) {
             $(`#${tableId} tbody`).sortable({

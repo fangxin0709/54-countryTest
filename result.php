@@ -1,6 +1,5 @@
-<?php include_once "./api/db.php";
-header('Content-Type: application/json');
-$rows = $conn->query("SELECT `id`,`name`,`email`,`takeBus` FROM `form` WHERE `takeBus` IS NOT NULL")->fetchAll(PDO::FETCH_ASSOC);
+<?php include "./api/db.php";
+$rows = $conn->query("SELECT `id`,`name`,`email`,`takeBus` FROM `form` WHERE `close` = 0")->fetchAll(PDO::FETCH_ASSOC);
 $allBus = [];
     foreach ($rows as $row) {
         $busName = $row['takeBus'];
@@ -14,5 +13,5 @@ $allBus = [];
         $allBus[$busName]['participants'][] = $row;
     }
 $get = array_values($allBus);
-echo json_encode($get);
+echo json_encode($get,JSON_UNESCAPED_UNICODE);
 ?>

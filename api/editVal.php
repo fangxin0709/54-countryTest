@@ -4,5 +4,5 @@
     ?>
     <script>
         alert("已更改!");
-        location.href="index.php";
+        location.href="../index.php";
     </script>
